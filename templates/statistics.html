@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>공부 통계</title>
+
+
+    <style>
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f4f6f8;
+
+        }
+
+
+        header {
+
+            background-color: #4f46e5;
+
+            color: white;
+
+            padding: 25px 40px;
+
+        }
+
+
+        header h1 {
+
+            margin: 0;
+
+        }
+
+
+        .container {
+
+            max-width: 1000px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+
+        }
+
+
+        .card {
+
+            background-color: white;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.08);
+
+        }
+
+
+        .total {
+
+            font-size: 40px;
+
+            font-weight: bold;
+
+            color: #4f46e5;
+
+        }
+
+
+        .stat-row {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .stat-title {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .bar-background {
+
+            width: 100%;
+
+            height: 25px;
+
+            background-color: #eeeeee;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+        }
+
+
+        .bar {
+
+            height: 100%;
+
+            background-color: #4f46e5;
+
+            border-radius: 20px;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        th,
+        td {
+
+            padding: 13px;
+
+            border-bottom: 1px solid #ddd;
+
+            text-align: center;
+
+        }
+
+
+        th {
+
+            background-color: #f8f8f8;
+
+        }
+
+
+        a {
+
+            color: #4f46e5;
+
+            text-decoration: none;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>📈 공부 통계</h1>
+
+    <p>
+        나의 공부량을 한눈에 확인해보세요.
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- 총 공부 시간 -->
+
+    <div class="card">
+
+        <h2>⏱️ 총 공부 시간</h2>
+
+        <div class="total">
+
+            {{ "%.1f"|format(total_hours) }}시간
+
+        </div>
+
+    </div>
+
+
+
+    <!-- 과목별 통계 -->
+
+    <div class="card">
+
+        <h2>📚 과목별 공부 시간</h2>
+
+
+        {% if subject_stats %}
+
+
+            {% for item in subject_stats %}
+
+            <div class="stat-row">
+
+
+                <div class="stat-title">
+
+                    <span>
+                        {{ item["subject"] }}
+                    </span>
+
+                    <strong>
+                        {{ "%.1f"|format(item["hours"]) }}시간
+                    </strong>
+
+                </div>
+
+
+                <div class="bar-background">
+
+                    <div
+                        class="bar"
+                        style="width:
+                        {{ (item['hours'] / max_subject_hours * 100) }}%;"
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <p>
+                아직 공부 기록이 없습니다.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- 날짜별 통계 -->
+
+    <div class="card">
+
+        <h2>📅 날짜별 공부 시간</h2>
+
+
+        {% if date_stats %}
+
+
+        <table>
+
+            <tr>
+
+                <th>날짜</th>
+
+                <th>공부 시간</th>
+
+                <th>그래프</th>
+
+            </tr>
+
+
+            {% for item in date_stats %}
+
+            <tr>
+
+                <td>
+                    {{ item["date"] }}
+                </td>
+
+
+                <td>
+
+                    {{ "%.1f"|format(item["hours"]) }}시간
+
+                </td>
+
+
+                <td>
+
+                    <div class="bar-background">
+
+                        <div
+                            class="bar"
+                            style="width:
+                            {{ (item['hours'] / max_date_hours * 100) }}%;"
+                        ></div>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+
+        </table>
+
+
+        {% else %}
+
+        <p>
+            아직 공부 기록이 없습니다.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <a href="/">
+        ← 메인 화면으로 돌아가기
+    </a>
+
+
+</div>
+
+
+</body>
+
+</html>
